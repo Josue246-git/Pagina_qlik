@@ -2,127 +2,135 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuperStore Executive Portal | Qlik Integration</title>
-    <style>
-        :root {
-            --primary: #009845;
-            /* Verde Qlik */
-            --dark: #2d3436;
-            --bg: #f4f7f6;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            color: var(--dark);
-        }
+<title>SuperStore Executive Portal | Qlik Integration</title>
 
-        header {
-            background-color: var(--dark);
-            color: white;
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+<script
+crossorigin="anonymous"
+type="application/javascript"
+src="https://cdn.jsdelivr.net/npm/@qlik/embed-web-components@1/dist/index.min.js"
+data-host="https://l676lvg3emfvcq2.us.qlikcloud.com"
+data-auth-type="anonymous">
+</script>
 
-        .logo {
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
+<style>
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 2rem auto;
-        }
+:root{
+--primary:#009845;
+--dark:#2d3436;
+--bg:#f4f7f6;
+}
 
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 20px;
-        }
+body{
+font-family:'Segoe UI',Tahoma;
+background-color:var(--bg);
+margin:0;
+color:var(--dark);
+}
 
-        .card {
-            background: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border-top: 4px solid var(--primary);
-        }
+header{
+background-color:var(--dark);
+color:white;
+padding:1rem 5%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
 
-        .card h3 {
-            margin-top: 0;
-            color: var(--dark);
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
+.logo{
+font-weight:bold;
+font-size:1.5rem;
+}
 
-        .iframe-container {
-            position: relative;
-            width: 100%;
-            height: 450px;
-            /* Ajusta según necesites */
-        }
+.container{
+width:90%;
+max-width:1200px;
+margin:2rem auto;
+}
 
+.dashboard-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(500px,1fr));
+gap:20px;
+}
 
-        .footer {
-            text-align: center;
-            margin-top: 3rem;
-            padding: 1rem;
-            font-size: 0.9rem;
-            color: #636e72;
-        }
-    </style>
+.card{
+background:white;
+border-radius:8px;
+padding:15px;
+box-shadow:0 4px 6px rgba(0,0,0,0.05);
+border-top:4px solid var(--primary);
+}
+
+.card h3{
+margin-top:0;
+border-bottom:1px solid #eee;
+padding-bottom:10px;
+}
+
+.chart{
+width:100%;
+height:450px;
+}
+
+.footer{
+text-align:center;
+margin-top:3rem;
+padding:1rem;
+font-size:0.9rem;
+}
+
+</style>
+
 </head>
 
 <body>
 
-    <header>
-        <div class="logo">SuperStore <span style="color: var(--primary);">Analytics</span></div>
-        <div>Portal de Decisiones Estratégicas - Hackathon 2026</div>
-    </header>
+<header>
+<div class="logo">SuperStore <span style="color:var(--primary)">Analytics</span></div>
+<div>Portal de Decisiones Estratégicas - Hackathon 2026</div>
+</header>
 
-    <div class="container">
-        <h2>Panel de Inteligencia de Negocios</h2>
-        <p>Visualizaciones avanzadas incrustadas mediante Qlik Single Integration API.</p>
+<div class="container">
 
-        <div class="dashboard-grid">
-            <div class="card">
-                <h3>📈 Rendimiento de Ventas vs Beneficio MAPA</h3>
-                <div class="iframe-container">
-                    <qlik-embed
-                    ui="analytics/chart"
-                    app-id="695f334c-5ae7-485a-99c0-9d4c234e168c"
-                    object-id="yMgL"
-                    style="width:100%;height:100%;">
-                    </qlik-embed>
-                </div>
-            </div>
+<h2>Panel de Inteligencia de Negocios</h2>
+<p>Visualizaciones avanzadas incrustadas con Qlik Embedded Analytics</p>
 
-            <div class="card">
-                <h3>🎯 Análisis de ROI y Descuentos</h3>
-                <div class="iframe-container">
-                    <qlik-embed
-                    ui="analytics/chart"
-                    app-id="695f334c-5ae7-485a-99c0-9d4c234e168c"
-                    object-id="UbmFBUT"
-                    style="width:100%;height:100%;">
-                    </qlik-embed>
-                </div>
-            </div>
+<div class="dashboard-grid">
 
+<div class="card">
+<h3>📈 Rendimiento de Ventas vs Beneficio</h3>
 
-        </div>
-    </div>
+<qlik-embed
+class="chart"
+ui="analytics/chart"
+app-id="695f334c-5ae7-485a-99c0-9d4c234e168c"
+object-id="yMgL">
+</qlik-embed>
 
-    <div class="footer">
-        Desarrollado para la Hackathon de Qlik | ESPOCH - Riobamba
-    </div>
+</div>
+
+<div class="card">
+<h3>🎯 Análisis de ROI y Descuentos</h3>
+
+<qlik-embed
+class="chart"
+ui="analytics/chart"
+app-id="695f334c-5ae7-485a-99c0-9d4c234e168c"
+object-id="UbmFBUT">
+</qlik-embed>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+Desarrollado para la Hackathon de Qlik | ESPOCH - Riobamba
+</div>
 
 </body>
 
