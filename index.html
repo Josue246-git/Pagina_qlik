@@ -69,14 +69,6 @@
             /* Ajusta según necesites */
         }
 
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
 
         .footer {
             text-align: center;
@@ -103,14 +95,24 @@
             <div class="card">
                 <h3>📈 Rendimiento de Ventas vs Beneficio MAPA</h3>
                 <div class="iframe-container">
-                    <iframe src="https://l676lvg3emfvcq2.us.qlikcloud.com/single/?appid=695f334c-5ae7-485a-99c0-9d4c234e168c&obj=yMgL&theme=horizon&opt=ctxmenu,currsel" style="border:none;width:100%;height:100%;"></iframe>
+                    <qlik-embed
+                    ui="analytics/chart"
+                    app-id="695f334c-5ae7-485a-99c0-9d4c234e168c"
+                    object-id="yMgL"
+                    style="width:100%;height:100%;">
+                    </qlik-embed>
                 </div>
             </div>
 
             <div class="card">
                 <h3>🎯 Análisis de ROI y Descuentos</h3>
                 <div class="iframe-container">
-                    <iframe src="https://l676lvg3emfvcq2.us.qlikcloud.com/single/?appid=695f334c-5ae7-485a-99c0-9d4c234e168c&obj=UbmFBUT&theme=horizon&opt=ctxmenu,currsel" style="border:none;width:100%;height:100%;"></iframe>
+                    <qlik-embed
+                    ui="analytics/chart"
+                    app-id="695f334c-5ae7-485a-99c0-9d4c234e168c"
+                    object-id="UbmFBUT"
+                    style="width:100%;height:100%;">
+                    </qlik-embed>
                 </div>
             </div>
 
