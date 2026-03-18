@@ -1,133 +1,462 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SuperStore Executive Portal | Qlik Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<title>SuperStore Executive Portal | Qlik Integration</title>
-
-  <script
-    crossorigin="anonymous"
-    type="application/javascript"
-    src="https://cdn.jsdelivr.net/npm/@qlik/embed-web-components@1/dist/index.min.js"
-    data-host="https://l676lvg3emfvcq2.us.qlikcloud.com"
-    data-web-integration-id="deldUOnOAI1lAtiqRYAfZbG0_OkzkJHs"
-    data-cross-site-cookies="true"
-  ></script>
-
+<!-- Qlik Embed SDK — MANTÉN esto igual, es correcto -->
+<script
+  crossorigin="anonymous"
+  type="application/javascript"
+  src="https://cdn.jsdelivr.net/npm/@qlik/embed-web-components@1/dist/index.min.js"
+  data-host="https://l676lvg3emfvcq2.us.qlikcloud.com"
+  data-web-integration-id="deldUOnOAI1lAtiqRYAfZbG0_OkzkJHs"
+  data-cross-site-cookies="true"
+></script>
 
 <style>
+/* ─── RESET & TOKENS ────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root{
---primary:#009845;
---dark:#2d3436;
---bg:#f4f7f6;
+:root {
+  --green:    #00c853;
+  --green-dk: #009845;
+  --green-glow: rgba(0,200,83,.18);
+  --coal:     #0d1117;
+  --surface:  #161b22;
+  --surface2: #1e2530;
+  --border:   rgba(255,255,255,.08);
+  --text:     #e6edf3;
+  --muted:    #7d8590;
+  --radius:   12px;
 }
 
-body{
-font-family:'Segoe UI',Tahoma;
-background-color:var(--bg);
-margin:0;
-color:var(--dark);
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--coal);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-header{
-background-color:var(--dark);
-color:white;
-padding:1rem 5%;
-display:flex;
-justify-content:space-between;
-align-items:center;
+/* ─── NOISE TEXTURE OVERLAY ─────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
 }
 
-.logo{
-font-weight:bold;
-font-size:1.5rem;
+/* ─── HEADER ─────────────────────────────────────────────── */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(13,17,23,.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: .85rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
-.container{
-width:90%;
-max-width:1200px;
-margin:2rem auto;
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: .05em;
+  color: var(--text);
+  white-space: nowrap;
+}
+.logo span { color: var(--green); }
+
+.badge {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--green);
+  background: var(--green-glow);
+  border: 1px solid rgba(0,200,83,.25);
+  padding: .3rem .75rem;
+  border-radius: 20px;
+  white-space: nowrap;
 }
 
-.dashboard-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(500px,1fr));
-gap:20px;
+/* ─── AUTH BANNER ────────────────────────────────────────── */
+#auth-banner {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(90deg, rgba(0,200,83,.12), transparent);
+  border: 1px solid rgba(0,200,83,.25);
+  border-radius: var(--radius);
+  padding: 1rem 1.4rem;
+  margin-bottom: 1.5rem;
+  font-size: .9rem;
+}
+#auth-banner.show { display: flex; }
+#auth-banner svg { flex-shrink: 0; }
+#auth-banner strong { color: var(--green); }
+#auth-banner a {
+  color: var(--green);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
-.card{
-background:white;
-border-radius:8px;
-padding:15px;
-box-shadow:0 4px 6px rgba(0,0,0,0.05);
-border-top:4px solid var(--primary);
+/* ─── MAIN LAYOUT ────────────────────────────────────────── */
+.container {
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  max-width: 1400px;
+  margin: 2.5rem auto;
 }
 
-.card h3{
-margin-top:0;
-border-bottom:1px solid #eee;
-padding-bottom:10px;
+.page-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: .04em;
+  line-height: 1;
+  margin-bottom: .4rem;
+}
+.page-title span { color: var(--green); }
+
+.page-sub {
+  color: var(--muted);
+  font-size: .9rem;
+  margin-bottom: 2rem;
+  font-weight: 300;
 }
 
-.chart{
-width:100%;
-height:450px;
+/* ─── KPI STRIP ──────────────────────────────────────────── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 2rem;
 }
 
-.footer{
-text-align:center;
-margin-top:3rem;
-padding:1rem;
-font-size:0.9rem;
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.kpi:hover { border-color: rgba(0,200,83,.35); }
+.kpi::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s;
+}
+.kpi:hover::after { transform: scaleX(1); }
+
+.kpi-label {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: .3rem;
+}
+.kpi-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  color: var(--text);
+  letter-spacing: .02em;
+}
+.kpi-delta {
+  font-size: .75rem;
+  color: var(--green);
+  font-weight: 500;
+  margin-top: .15rem;
 }
 
+/* ─── DASHBOARD GRID ─────────────────────────────────────── */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr));
+  gap: 20px;
+}
+
+/* ─── CARD ───────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow .25s, border-color .25s;
+}
+.card:hover {
+  border-color: rgba(0,200,83,.3);
+  box-shadow: 0 0 40px rgba(0,200,83,.07);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.card-icon {
+  width: 32px; height: 32px;
+  background: var(--green-glow);
+  border: 1px solid rgba(0,200,83,.25);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.card-title {
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.card-sub {
+  font-size: .76rem;
+  color: var(--muted);
+  margin-top: .1rem;
+}
+
+/* ─── QLIK EMBED WRAPPER ─────────────────────────────────── */
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  /* Aspect ratio 16:10 — se adapta a cualquier ancho */
+  padding-bottom: 62.5%;
+  background: var(--coal);
+}
+
+.chart-wrapper qlik-embed {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Loader mientras carga el gráfico */
+.chart-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+  color: var(--muted);
+  font-size: .85rem;
+  pointer-events: none;
+  z-index: 0;
+}
+.spinner {
+  width: 32px; height: 32px;
+  border: 2px solid var(--border);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem 1rem 3rem;
+  color: var(--muted);
+  font-size: .82rem;
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+footer strong { color: var(--green); }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 600px) {
+  header { flex-wrap: wrap; }
+  .badge { font-size: .65rem; }
+  .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
-
 </head>
-
 <body>
 
+<!-- HEADER -->
 <header>
-<div class="logo">SuperStore <span style="color:var(--primary)">Analytics</span></div>
-<div>Portal de Decisiones Estratégicas - Hackathon 2026</div>
+  <div class="logo">SuperStore <span>Analytics</span></div>
+  <div class="badge">Hackathon 2026 · ESPOCH</div>
 </header>
 
 <div class="container">
 
-<h2>Panel de Inteligencia de Negocios</h2>
-<p>Visualizaciones avanzadas incrustadas con Qlik Embedded Analytics</p>
-
-<div class="dashboard-grid">
-
-  <div class="card">
-    <h3>📈 Rendimiento de Ventas vs Beneficio</h3>
-    <qlik-embed 
-      ui="analytics/chart" 
-      app-id="695f334c-5ae7-485a-99c0-9d4c234e168c" 
-      object-id="UbmFBUT" 
-      theme="Sense Horizonte"
-    ></qlik-embed>
+  <!-- AUTH NOTICE (se muestra automáticamente si hay error) -->
+  <div id="auth-banner" role="alert">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div>
+      <strong>Autenticación requerida.</strong> Para ver las gráficas necesitas tener sesión activa en Qlik Cloud.
+      <a href="https://l676lvg3emfvcq2.us.qlikcloud.com" target="_blank" rel="noopener">Inicia sesión aquí</a>
+      y luego recarga esta página.
+    </div>
   </div>
 
-  <div class="card">
-    <h3>🎯 Análisis de ROI y Descuentos</h3>
-    <qlik-embed 
-      ui="analytics/chart" 
-      app-id="695f334c-5ae7-485a-99c0-9d4c234e168c" 
-      object-id="yMgL" 
-      theme="Sense Horizonte"
-    ></qlik-embed>
+  <!-- TITLE -->
+  <h1 class="page-title">Panel de <span>Inteligencia</span> de Negocios</h1>
+  <p class="page-sub">Visualizaciones avanzadas con Qlik Embedded Analytics · SuperStore Dataset</p>
+
+  <!-- KPI STRIP (estático decorativo) -->
+  <div class="kpi-strip">
+    <div class="kpi">
+      <div class="kpi-label">App ID</div>
+      <div class="kpi-value" style="font-size:1rem;font-family:'DM Sans',sans-serif;word-break:break-all;color:var(--muted)">695f334c…</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Gráficas</div>
+      <div class="kpi-value">2</div>
+      <div class="kpi-delta">Embebidas</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Tenant</div>
+      <div class="kpi-value" style="font-size:1rem;font-family:'DM Sans',sans-serif;color:var(--muted)">us.qlikcloud</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Año</div>
+      <div class="kpi-value">2026</div>
+      <div class="kpi-delta">Hackathon</div>
+    </div>
   </div>
 
+  <!-- DASHBOARD GRID -->
+  <div class="dashboard-grid">
+
+    <!-- Gráfica 1 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📈</div>
+        <div>
+          <div class="card-title">Rendimiento de Ventas vs Beneficio</div>
+          <div class="card-sub">Tasa de descuento vs Margen por subcategoría</div>
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <!-- Loader visual mientras Qlik carga -->
+        <div class="chart-loader" id="loader1">
+          <div class="spinner"></div>
+          <span>Cargando gráfica…</span>
+        </div>
+        <qlik-embed
+          ui="analytics/chart"
+          app-id="695f334c-5ae7-485a-99c0-9d4c234e168c"
+          object-id="UbmFBUT"
+          theme="Sense Horizonte"
+        ></qlik-embed>
+      </div>
+    </div>
+
+    <!-- Gráfica 2 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🎯</div>
+        <div>
+          <div class="card-title">Análisis de ROI y Descuentos</div>
+          <div class="card-sub">Beneficios por estado geográfico</div>
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <div class="chart-loader" id="loader2">
+          <div class="spinner"></div>
+          <span>Cargando gráfica…</span>
+        </div>
+        <qlik-embed
+          ui="analytics/chart"
+          app-id="695f334c-5ae7-485a-99c0-9d4c234e168c"
+          object-id="yMgL"
+          theme="Sense Horizonte"
+        ></qlik-embed>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-<div class="footer">
-Desarrollado para la Hackathon de Qlik | ESPOCH - Riobamba
-</div>
+<!-- FOOTER -->
+<footer>
+  Desarrollado para la <strong>Hackathon de Qlik</strong> · ESPOCH – Riobamba, Ecuador
+</footer>
+
+<script>
+// ── Detección de error de autenticación ─────────────────────
+// Escucha errores de red del SDK de Qlik
+window.addEventListener('error', function(e) {
+  if (e.message && (e.message.includes('401') || e.message.includes('tenant-settings'))) {
+    document.getElementById('auth-banner').classList.add('show');
+  }
+}, true);
+
+// Fallback: si después de 8s los embeds siguen vacíos, mostramos el banner
+setTimeout(function() {
+  const embeds = document.querySelectorAll('qlik-embed');
+  let allEmpty = true;
+  embeds.forEach(function(el) {
+    if (el.shadowRoot && el.shadowRoot.innerHTML.trim() !== '') allEmpty = false;
+  });
+  if (allEmpty) {
+    document.getElementById('auth-banner').classList.add('show');
+  }
+}, 8000);
+
+// ── Ocultar loaders cuando el embed reporta contenido ───────
+// Qlik Embed dispara 'qlik-embed-content-loaded' o simplemente
+// llena el shadowRoot; chequeamos con MutationObserver.
+function watchEmbed(embed, loaderId) {
+  const loader = document.getElementById(loaderId);
+  if (!loader || !embed) return;
+
+  const hide = function() { loader.style.display = 'none'; };
+
+  // Evento nativo del SDK (si existe)
+  embed.addEventListener('qlik-embed-content-loaded', hide);
+
+  // Fallback por MutationObserver sobre el shadowRoot cuando exista
+  const checkShadow = setInterval(function() {
+    if (embed.shadowRoot) {
+      clearInterval(checkShadow);
+      const obs = new MutationObserver(function() {
+        if (embed.shadowRoot.children.length > 0) {
+          hide();
+          obs.disconnect();
+        }
+      });
+      obs.observe(embed.shadowRoot, { childList: true, subtree: true });
+    }
+  }, 300);
+}
+
+document.querySelectorAll('qlik-embed').forEach(function(el, i) {
+  watchEmbed(el, 'loader' + (i + 1));
+});
+</script>
 
 </body>
-
 </html>
