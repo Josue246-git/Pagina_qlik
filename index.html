@@ -1,341 +1,133 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SuperStore Executive Portal | Qlik Analytics</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<title>SuperStore Executive Portal | Qlik Integration</title>
+
+  <script
+    crossorigin="anonymous"
+    type="application/javascript"
+    src="https://cdn.jsdelivr.net/npm/@qlik/embed-web-components@1/dist/index.min.js"
+    data-host="https://l676lvg3emfvcq2.us.qlikcloud.com"
+    data-web-integration-id="deldUOnOAI1lAtiqRYAfZbG0_OkzkJHs"
+    data-cross-site-cookies="true"
+  ></script>
+
+
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --green: #00c853; --green-dk: #009845;
-  --green-glow: rgba(0,200,83,.15);
-  --coal: #0d1117; --surface: #161b22; --surface2: #1e2530;
-  --border: rgba(255,255,255,.08); --text: #e6edf3; --muted: #7d8590;
-  --radius: 12px;
-}
-body { font-family: 'DM Sans', sans-serif; background: var(--coal); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-/* HEADER */
-header {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(13,17,23,.9); backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  padding: .85rem 5%; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-}
-.logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: .05em; }
-.logo span { color: var(--green); }
-.badge {
-  font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--green); background: var(--green-glow); border: 1px solid rgba(0,200,83,.25);
-  padding: .3rem .75rem; border-radius: 20px; white-space: nowrap;
+:root{
+--primary:#009845;
+--dark:#2d3436;
+--bg:#f4f7f6;
 }
 
-/* CONTAINER */
-.container { position: relative; z-index: 1; width: 90%; max-width: 1400px; margin: 2.5rem auto; }
-.page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem,4vw,3rem); letter-spacing: .04em; margin-bottom: .4rem; }
-.page-title span { color: var(--green); }
-.page-sub { color: var(--muted); font-size: .9rem; margin-bottom: 2rem; font-weight: 300; }
+body{
+font-family:'Segoe UI',Tahoma;
+background-color:var(--bg);
+margin:0;
+color:var(--dark);
+}
 
-/* AUTH PANEL */
-#auth-panel {
-  background: var(--surface); border: 1px solid rgba(0,200,83,.3);
-  border-radius: var(--radius); padding: 2rem; margin-bottom: 2rem;
+header{
+background-color:var(--dark);
+color:white;
+padding:1rem 5%;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
-#auth-panel h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--green); margin-bottom: .5rem; letter-spacing: .05em; }
-#auth-panel p { color: var(--muted); font-size: .88rem; line-height: 1.6; margin-bottom: 1.2rem; }
-.auth-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
-.auth-card {
-  background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
-  padding: 1.2rem; transition: border-color .2s;
-}
-.auth-card:hover { border-color: rgba(0,200,83,.3); }
-.auth-card h3 { font-size: .9rem; font-weight: 600; margin-bottom: .4rem; display: flex; align-items: center; gap: .5rem; }
-.auth-card p { font-size: .8rem; color: var(--muted); line-height: 1.5; margin-bottom: 1rem; }
-.step { display: flex; align-items: flex-start; gap: .6rem; margin-bottom: .5rem; font-size: .8rem; color: var(--muted); }
-.step-num { background: var(--green-glow); color: var(--green); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 700; flex-shrink: 0; margin-top: .05rem; }
-.btn {
-  display: inline-flex; align-items: center; gap: .4rem;
-  background: var(--green); color: #000; font-weight: 700; font-size: .82rem;
-  padding: .55rem 1.1rem; border-radius: 6px; border: none; cursor: pointer;
-  text-decoration: none; transition: opacity .15s; white-space: nowrap; font-family: inherit;
-}
-.btn:hover { opacity: .88; }
-.btn-outline {
-  background: transparent; color: var(--green); border: 1px solid rgba(0,200,83,.4);
-}
-.btn-outline:hover { background: var(--green-glow); opacity: 1; }
 
-/* TOKEN INPUT */
-.token-row { display: flex; gap: .5rem; margin-top: .8rem; }
-.token-input {
-  flex: 1; background: var(--coal); border: 1px solid var(--border); border-radius: 6px;
-  color: var(--text); font-family: monospace; font-size: .78rem; padding: .5rem .8rem;
-  outline: none; transition: border-color .2s;
+.logo{
+font-weight:bold;
+font-size:1.5rem;
 }
-.token-input:focus { border-color: rgba(0,200,83,.5); }
-.token-input::placeholder { color: var(--muted); }
 
-/* STATUS */
-#status-bar {
-  display: none; align-items: center; gap: .75rem; font-size: .85rem;
-  padding: .75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;
+.container{
+width:90%;
+max-width:1200px;
+margin:2rem auto;
 }
-#status-bar.show { display: flex; }
-#status-bar.ok { background: rgba(0,200,83,.1); border: 1px solid rgba(0,200,83,.25); color: var(--green); }
-#status-bar.err { background: rgba(255,80,80,.1); border: 1px solid rgba(255,80,80,.25); color: #ff6b6b; }
 
-/* GRID & CARDS */
-.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr)); gap: 20px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .25s, border-color .25s; }
-.card:hover { border-color: rgba(0,200,83,.3); box-shadow: 0 0 40px rgba(0,200,83,.07); }
-.card-header { display: flex; align-items: center; gap: .75rem; padding: 1.1rem 1.4rem; border-bottom: 1px solid var(--border); background: var(--surface2); }
-.card-icon { width: 32px; height: 32px; background: var(--green-glow); border: 1px solid rgba(0,200,83,.25); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-.card-title { font-size: .95rem; font-weight: 600; }
-.card-sub { font-size: .76rem; color: var(--muted); margin-top: .1rem; }
+.dashboard-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(500px,1fr));
+gap:20px;
+}
 
-/* CHART WRAPPER */
-.chart-wrapper {
-  position: relative; width: 100%;
-  padding-bottom: 62.5%;
-  background: var(--coal);
+.card{
+background:white;
+border-radius:8px;
+padding:15px;
+box-shadow:0 4px 6px rgba(0,0,0,0.05);
+border-top:4px solid var(--primary);
 }
-.chart-wrapper qlik-embed {
-  position: absolute; inset: 0;
-  width: 100% !important; height: 100% !important;
-  display: block;
-}
-.chart-placeholder {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: .75rem; color: var(--muted); font-size: .85rem; text-align: center; padding: 1rem;
-}
-.spinner { width: 32px; height: 32px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 1s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.lock-icon { font-size: 2.5rem; margin-bottom: .5rem; opacity: .4; }
 
-/* FOOTER */
-footer { text-align: center; padding: 2rem 1rem 3rem; color: var(--muted); font-size: .82rem; border-top: 1px solid var(--border); margin-top: 3rem; }
-footer strong { color: var(--green); }
-
-@media (max-width: 600px) {
-  header { flex-wrap: wrap; }
-  .token-row { flex-direction: column; }
+.card h3{
+margin-top:0;
+border-bottom:1px solid #eee;
+padding-bottom:10px;
 }
+
+.chart{
+width:100%;
+height:450px;
+}
+
+.footer{
+text-align:center;
+margin-top:3rem;
+padding:1rem;
+font-size:0.9rem;
+}
+
 </style>
+
 </head>
+
 <body>
 
 <header>
-  <div class="logo">SuperStore <span>Analytics</span></div>
-  <div class="badge" id="auth-badge">Sin autenticar</div>
+<div class="logo">SuperStore <span style="color:var(--primary)">Analytics</span></div>
+<div>Portal de Decisiones Estratégicas - Hackathon 2026</div>
 </header>
 
 <div class="container">
-  <h1 class="page-title">Panel de <span>Inteligencia</span> de Negocios</h1>
-  <p class="page-sub">Visualizaciones avanzadas con Qlik Embedded Analytics · SuperStore Dataset</p>
 
-  <!-- AUTH PANEL -->
-  <div id="auth-panel">
-    <h2>🔐 Autenticación requerida</h2>
-    <p>
-      El error <code style="color:#ff6b6b">401 Unauthorized</code> ocurre porque los navegadores modernos bloquean las cookies
-      de sesión entre dominios distintos (<code>github.io</code> → <code>qlikcloud.com</code>).
-      Tienes dos opciones para resolverlo:
-    </p>
+<h2>Panel de Inteligencia de Negocios</h2>
+<p>Visualizaciones avanzadas incrustadas con Qlik Embedded Analytics</p>
 
-    <div class="auth-options">
+<div class="dashboard-grid">
 
-      <!-- OPCIÓN A -->
-      <div class="auth-card">
-        <h3>🪟 Opción A — Ventana de login <span style="background:rgba(0,200,83,.15);color:var(--green);font-size:.65rem;padding:.2rem .5rem;border-radius:4px;font-weight:600">RECOMENDADA</span></h3>
-        <p>Abre Qlik Cloud en una ventana emergente, inicia sesión, y luego carga las gráficas.</p>
-        <div class="step"><div class="step-num">1</div><span>Haz clic en "Abrir login de Qlik"</span></div>
-        <div class="step"><div class="step-num">2</div><span>Inicia sesión en la ventana que aparece</span></div>
-        <div class="step"><div class="step-num">3</div><span>Cierra esa ventana y pulsa "Recargar gráficas"</span></div>
-        <br>
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-          <button class="btn" onclick="openQlikLogin()">🔑 Abrir login de Qlik</button>
-          <button class="btn btn-outline" onclick="reloadEmbeds()">🔄 Recargar gráficas</button>
-        </div>
-      </div>
-
-      <!-- OPCIÓN B -->
-      <div class="auth-card">
-        <h3>🗝️ Opción B — API Key</h3>
-        <p>Si tienes una API Key de Qlik Cloud, pégala aquí para autenticarte directamente.</p>
-        <div class="step"><div class="step-num">1</div><span>Qlik Cloud → perfil → <strong style="color:var(--text)">API Keys</strong> → Create new key</span></div>
-        <div class="step"><div class="step-num">2</div><span>Copia la key generada (solo se muestra una vez)</span></div>
-        <div class="step"><div class="step-num">3</div><span>Pégala aquí y haz clic en Conectar</span></div>
-        <div class="token-row">
-          <input class="token-input" id="api-key-input" type="password" placeholder="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...">
-          <button class="btn" onclick="connectWithApiKey()">Conectar</button>
-        </div>
-      </div>
-
-    </div>
+  <div class="card">
+    <h3>📈 Rendimiento de Ventas vs Beneficio</h3>
+    <qlik-embed 
+      ui="analytics/chart" 
+      app-id="695f334c-5ae7-485a-99c0-9d4c234e168c" 
+      object-id="UbmFBUT" 
+      theme="Sense Horizonte"
+    ></qlik-embed>
   </div>
 
-  <!-- STATUS BAR -->
-  <div id="status-bar"></div>
-
-  <!-- DASHBOARD -->
-  <div class="dashboard-grid">
-
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon">📈</div>
-        <div>
-          <div class="card-title">Rendimiento de Ventas vs Beneficio</div>
-          <div class="card-sub">Tasa de descuento vs Margen por subcategoría</div>
-        </div>
-      </div>
-      <div class="chart-wrapper" id="wrap1">
-        <div class="chart-placeholder" id="ph1">
-          <div class="lock-icon">🔒</div>
-          <span>Autentícate arriba para ver esta gráfica</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon">🎯</div>
-        <div>
-          <div class="card-title">Análisis de ROI y Descuentos</div>
-          <div class="card-sub">Beneficios por estado geográfico</div>
-        </div>
-      </div>
-      <div class="chart-wrapper" id="wrap2">
-        <div class="chart-placeholder" id="ph2">
-          <div class="lock-icon">🔒</div>
-          <span>Autentícate arriba para ver esta gráfica</span>
-        </div>
-      </div>
-    </div>
-
+  <div class="card">
+    <h3>🎯 Análisis de ROI y Descuentos</h3>
+    <qlik-embed 
+      ui="analytics/chart" 
+      app-id="695f334c-5ae7-485a-99c0-9d4c234e168c" 
+      object-id="yMgL" 
+      theme="Sense Horizonte"
+    ></qlik-embed>
   </div>
+
 </div>
 
-<footer>
-  Desarrollado para la <strong>Hackathon de Qlik</strong> · ESPOCH – Riobamba, Ecuador
-</footer>
-
-<script>
-const QLIK_HOST  = 'https://l676lvg3emfvcq2.us.qlikcloud.com';
-const WEB_INT_ID = 'deldUOnOAI1lAtiqRYAfZbG0_OkzkJHs';
-const APP_ID     = '695f334c-5ae7-485a-99c0-9d4c234e168c';
-
-const CHARTS = [
-  { wrapperId: 'wrap1', placeholderId: 'ph1', objectId: 'UbmFBUT' },
-  { wrapperId: 'wrap2', placeholderId: 'ph2', objectId: 'yMgL'    },
-];
-
-function showStatus(msg, type = 'ok') {
-  const bar = document.getElementById('status-bar');
-  bar.textContent = msg;
-  bar.className = 'show ' + type;
-}
-
-/* Carga el SDK dinámicamente con atributos opcionales */
-function loadQlikSDK(extraAttrs) {
-  return new Promise((resolve, reject) => {
-    const old = document.getElementById('qlik-sdk');
-    if (old) old.remove();
-
-    const s = document.createElement('script');
-    s.id = 'qlik-sdk';
-    s.crossOrigin = 'anonymous';
-    s.type = 'application/javascript';
-    s.src = 'https://cdn.jsdelivr.net/npm/@qlik/embed-web-components@1/dist/index.min.js';
-    s.setAttribute('data-host', QLIK_HOST);
-    s.setAttribute('data-web-integration-id', WEB_INT_ID);
-    s.setAttribute('data-cross-site-cookies', 'true');
-    if (extraAttrs) {
-      Object.entries(extraAttrs).forEach(([k, v]) => s.setAttribute(k, v));
-    }
-    s.onload  = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-/* Inyecta los <qlik-embed> dentro de cada wrapper */
-function injectEmbeds() {
-  CHARTS.forEach(({ wrapperId, placeholderId, objectId }) => {
-    const wrap = document.getElementById(wrapperId);
-    const ph   = document.getElementById(placeholderId);
-    if (ph) ph.remove();
-    if (wrap.querySelector('qlik-embed')) return;
-
-    const spinner = document.createElement('div');
-    spinner.className = 'chart-placeholder';
-    spinner.innerHTML = '<div class="spinner"></div><span>Cargando gráfica…</span>';
-    wrap.appendChild(spinner);
-
-    const embed = document.createElement('qlik-embed');
-    embed.setAttribute('ui', 'analytics/chart');
-    embed.setAttribute('app-id', APP_ID);
-    embed.setAttribute('object-id', objectId);
-    embed.setAttribute('theme', 'Sense Horizonte');
-    wrap.appendChild(embed);
-
-    const hide = () => { if (spinner.parentNode) spinner.remove(); };
-    embed.addEventListener('qlik-embed-content-loaded', hide);
-    setTimeout(hide, 12000);
-  });
-}
-
-function markAuthenticated(label) {
-  document.getElementById('auth-panel').style.display = 'none';
-  const badge = document.getElementById('auth-badge');
-  badge.textContent = label + ' ✓';
-  badge.style.background = 'rgba(0,200,83,.2)';
-}
-
-/* ── OPCIÓN A ── */
-function openQlikLogin() {
-  window.open(QLIK_HOST, 'QlikLogin', 'width=900,height=650,left=200,top=100');
-  showStatus('Inicia sesión en la ventana de Qlik Cloud. Luego haz clic en "Recargar gráficas".', 'ok');
-}
-
-async function reloadEmbeds() {
-  showStatus('Conectando con Qlik Cloud…', 'ok');
-  try {
-    await loadQlikSDK();
-    injectEmbeds();
-    markAuthenticated('Autenticado');
-    showStatus('✅ Conexión establecida. Las gráficas están cargando…', 'ok');
-  } catch {
-    showStatus('❌ No se pudo cargar el SDK. Verifica que hayas iniciado sesión en la ventana de Qlik.', 'err');
-  }
-}
-
-/* ── OPCIÓN B ── */
-async function connectWithApiKey() {
-  const key = document.getElementById('api-key-input').value.trim();
-  if (!key) { showStatus('⚠️ Ingresa tu API Key primero.', 'err'); return; }
-  showStatus('Verificando API Key…', 'ok');
-
-  try {
-    const res = await fetch(`${QLIK_HOST}/api/v1/users/me`, {
-      headers: { 'Authorization': 'Bearer ' + key }
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const user = await res.json();
-
-    await loadQlikSDK({ 'data-access-token': key });
-    injectEmbeds();
-    markAuthenticated(user.name || user.email || 'Usuario');
-    showStatus('✅ Autenticado como ' + (user.name || user.email) + '. Cargando gráficas…', 'ok');
-
-  } catch (e) {
-    console.error(e);
-    showStatus('❌ API Key inválida o sin permisos. Ve a Qlik Cloud → perfil → API Keys.', 'err');
-  }
-}
-</script>
+<div class="footer">
+Desarrollado para la Hackathon de Qlik | ESPOCH - Riobamba
+</div>
 
 </body>
+
 </html>
